@@ -1,9 +1,11 @@
 import { getSettings } from "../settings.js";
 import { libWrapper } from "./libWrapper.js";
 
-import { d20Roll } from "../../../../systems/dnd5e/module/dice.js";
+import { dice } from "../../../../systems/dnd5e/dnd5e.mjs";
 import { dnd5e, i18n, Utils } from "../utils/index.js";
 import { CustomRoll } from "../custom-roll.js";
+
+const d20Roll = dice.d20Roll;
 
 export function patchCoreFunctions() {
 	if (!libWrapper.is_fallback && !libWrapper.version_at_least?.(1, 4, 0)) {
@@ -16,7 +18,7 @@ export function patchCoreFunctions() {
 	}
 
 	const actorProto = "CONFIG.Actor.documentClass.prototype";
-	override("CONFIG.Item.documentClass.prototype.roll", itemRoll);
+	override("CONFIG.Item.documentClass.prototype.use", itemRoll);
 	override("CONFIG.Item.documentClass.prototype.rollAttack", itemRollAttack);
 	override("CONFIG.Item.documentClass.prototype.rollToolCheck", itemRollToolCheck);
 	libWrapper.register("betterrolls5e", `${actorProto}.rollSkill`, actorRollSkill, "MIXED");
